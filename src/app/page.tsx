@@ -39,14 +39,21 @@ export default async function Home() {
 
   // Fetch all settings
   const allSettings = await prisma.setting.findMany();
-  const settingsMap = allSettings.reduce((acc, curr) => {
-    acc[curr.key] = curr.value;
-    return acc;
-  }, {} as Record<string, string>);
+  const settingsMap = allSettings.reduce(
+    (acc, curr) => {
+      acc[curr.key] = curr.value;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
 
   const phone = settingsMap.phoneNumber || "+90 500 123 45 67";
   const email = settingsMap.contactEmail || "info@msyelektronik.com";
   const address = settingsMap.address || "Örnek Mah. Elektronik Cad. No:1, İstanbul";
+  const workingHours = settingsMap.workingHours || "Pzt - Cmt: 09:00 - 18:00";
+  const instagramUrl = settingsMap.instagramUrl || "";
+  const facebookUrl = settingsMap.facebookUrl || "";
+  const companyName = settingsMap.companyName || "MSY Elektronik";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -77,8 +84,15 @@ export default async function Home() {
       <ServicesSection />
       <AboutSection />
       <CTABanner />
-      <ContactSection phone={phone} email={email} address={address} />
-      <Footer />
+      <ContactSection phone={phone} email={email} address={address} workingHours={workingHours} />
+      <Footer 
+        phone={phone} 
+        email={email} 
+        workingHours={workingHours} 
+        companyName={companyName}
+        instagramUrl={instagramUrl}
+        facebookUrl={facebookUrl}
+      />
     </div>
   );
 }

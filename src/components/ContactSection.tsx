@@ -6,7 +6,7 @@ import { submitContactMessage } from "@/app/actions/contact";
 
 
 
-export default function ContactSection({ phone = '+90 500 123 45 67', email = 'info@msyelektronik.com', address = 'Örnek Mah. Elektronik Cad. No:1, İstanbul' }: { phone?: string; email?: string; address?: string }) {
+export default function ContactSection({ phone = '+90 500 123 45 67', email = 'info@msyelektronik.com', address = 'Örnek Mah. Elektronik Cad. No:1, İstanbul', workingHours = 'Pzt - Cmt: 09:00 - 18:00' }: { phone?: string; email?: string; address?: string; workingHours?: string }) {
   const formattedPhoneForHref = phone.replace(/[^0-9+]/g, '');
 
   const contactItems = [
@@ -92,7 +92,7 @@ export default function ContactSection({ phone = '+90 500 123 45 67', email = 'i
       </svg>
     ),
     label: "Çalışma Saatleri",
-    value: "Pzt–Cmt: 09:00 – 18:00",
+    value: workingHours,
     href: "#",
   },
 ];

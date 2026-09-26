@@ -65,6 +65,14 @@ export default function SettingsForm({
         />
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <Input
+          label="Çalışma Saatleri"
+          name="workingHours"
+          defaultValue={settings.workingHours || "Pzt - Cmt: 09:00 - 18:00"}
+        />
+      </div>
+
       <Textarea
         label="Adres"
         name="address"
