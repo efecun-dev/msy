@@ -145,10 +145,8 @@ export async function updateProduct(id: number, formData: FormData) {
   }
 
   if (imageUrls.length > 0) {
-    // If it's the first time uploading images, set main imageUrl
-    if (!oldProduct?.imageUrl) {
-      data.imageUrl = imageUrls[0];
-    }
+    // Yeni yüklenen ilk fotoğrafı direkt olarak ana fotoğraf yap
+    data.imageUrl = imageUrls[0];
     
     const currentMaxOrder = oldProduct?.images.reduce((max, img) => Math.max(max, img.order), -1) ?? -1;
     
@@ -197,10 +195,20 @@ export async function deleteProduct(id: number) {
 
 export async function deleteProductImage(id: number) {
   await checkAuth();
-  const img = await prisma.productImage.findUnique({ where: { id } });
+  const img = await prisma.productImage.findUnique({ where: { id }, include: { product: { include: { images: true } } } });
   if (img) {
     await deleteFile(img.url);
     await prisma.productImage.delete({ where: { id } });
+    
+    // Eğer silinen fotoğraf, ürünün "ana kapak" fotoğrafıysa (imageUrl)
+    if (img.product.imageUrl === img.url) {
+      // Kalan fotoğraflardan ilkini bul
+      const remainingImage = img.product.images.find(i => i.id !== id);
+      await prisma.product.update({
+        where: { id: img.productId },
+        data: { imageUrl: remainingImage ? remainingImage.url : null }
+      });
+    }
   }
   revalidatePath("/dashboard/products");
   revalidatePath("/");
