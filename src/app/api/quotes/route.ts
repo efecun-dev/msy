@@ -88,7 +88,7 @@ export async function POST(request: Request) {
 
         await resend.emails.send({
           from: process.env.EMAIL_FROM || "MSY Elektronik <efe@efecun.dev>",
-          to: process.env.ADMIN_EMAIL || "mahmutefecun12@gmail.com",
+          to: process.env.ADMIN_EMAIL || "msyelektronik55@gmail.com",
           subject: `Yeni Teklif: ${quoteNumber} - ${customerName}`,
           html: htmlContent,
         });

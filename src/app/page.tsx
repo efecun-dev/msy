@@ -49,7 +49,8 @@ export default async function Home() {
 
   const phone = settingsMap.phoneNumber || "+90 500 123 45 67";
   const email = settingsMap.contactEmail || "info@msyelektronik.com";
-  const address = settingsMap.address || "Örnek Mah. Elektronik Cad. No:1, İstanbul";
+  const address =
+    settingsMap.address || "Örnek Mah. Elektronik Cad. No:1, İstanbul";
   const workingHours = settingsMap.workingHours || "Pzt - Cmt: 09:00 - 18:00";
   const instagramUrl = settingsMap.instagramUrl || "";
   const facebookUrl = settingsMap.facebookUrl || "";
@@ -84,11 +85,16 @@ export default async function Home() {
       <ServicesSection />
       <AboutSection />
       <CTABanner />
-      <ContactSection phone={phone} email={email} address={address} workingHours={workingHours} />
-      <Footer 
-        phone={phone} 
-        email={email} 
-        workingHours={workingHours} 
+      <ContactSection
+        phone={phone}
+        email={email}
+        address={address}
+        workingHours={workingHours}
+      />
+      <Footer
+        phone={phone}
+        email={email}
+        workingHours={workingHours}
         companyName={companyName}
         instagramUrl={instagramUrl}
         facebookUrl={facebookUrl}

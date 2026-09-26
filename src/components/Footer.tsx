@@ -2,8 +2,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { navLinks } from "@/lib/data";
 
-export default function Footer({ phone = '+90 500 123 45 67', email = 'info@msyelektronik.com', workingHours = 'Pzt - Cmt: 09:00 - 18:00', companyName = 'MSY Elektronik', instagramUrl = '', facebookUrl = '' }: { phone?: string; email?: string; workingHours?: string; companyName?: string; instagramUrl?: string; facebookUrl?: string; }) {
-  const formattedPhoneForHref = phone.replace(/[^0-9+]/g, '');
+export default function Footer({
+  phone = "+90 500 123 45 67",
+  email = "info@msyelektronik.com",
+  workingHours = "Pzt - Cmt: 09:00 - 18:00",
+  companyName = "MSY Elektronik",
+  instagramUrl = "",
+  facebookUrl = "",
+}: {
+  phone?: string;
+  email?: string;
+  workingHours?: string;
+  companyName?: string;
+  instagramUrl?: string;
+  facebookUrl?: string;
+}) {
+  const formattedPhoneForHref = phone.replace(/[^0-9+]/g, "");
   return (
     <footer className="border-t border-white/10 bg-black/40 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +62,6 @@ export default function Footer({ phone = '+90 500 123 45 67', email = 'info@msye
             </ul>
           </div>
 
-
           {/* Social */}
           {(instagramUrl || facebookUrl) && (
             <div>
@@ -56,14 +69,24 @@ export default function Footer({ phone = '+90 500 123 45 67', email = 'info@msye
               <ul className="space-y-2 text-sm text-gray-400">
                 {instagramUrl && (
                   <li>
-                    <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
+                    <a
+                      href={instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-blue-400 transition-colors"
+                    >
                       Instagram
                     </a>
                   </li>
                 )}
                 {facebookUrl && (
                   <li>
-                    <a href={facebookUrl} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
+                    <a
+                      href={facebookUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:text-blue-400 transition-colors"
+                    >
                       Facebook
                     </a>
                   </li>
