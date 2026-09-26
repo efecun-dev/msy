@@ -37,6 +37,17 @@ export default async function Home() {
     } catch (e) {}
   }
 
+  // Fetch all settings
+  const allSettings = await prisma.setting.findMany();
+  const settingsMap = allSettings.reduce((acc, curr) => {
+    acc[curr.key] = curr.value;
+    return acc;
+  }, {} as Record<string, string>);
+
+  const phone = settingsMap.phoneNumber || "+90 500 123 45 67";
+  const email = settingsMap.contactEmail || "info@msyelektronik.com";
+  const address = settingsMap.address || "Örnek Mah. Elektronik Cad. No:1, İstanbul";
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -66,7 +77,7 @@ export default async function Home() {
       <ServicesSection />
       <AboutSection />
       <CTABanner />
-      <ContactSection />
+      <ContactSection phone={phone} email={email} address={address} />
       <Footer />
     </div>
   );

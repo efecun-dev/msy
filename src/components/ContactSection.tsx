@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useState } from "react";
 import { submitContactMessage } from "@/app/actions/contact";
 
-const contactItems = [
+
+
+export default function ContactSection({ phone = '+90 500 123 45 67', email = 'info@msyelektronik.com', address = 'Örnek Mah. Elektronik Cad. No:1, İstanbul' }: { phone?: string; email?: string; address?: string }) {
+  const formattedPhoneForHref = phone.replace(/[^0-9+]/g, '');
+
+  const contactItems = [
   {
     icon: (
       <svg
@@ -22,8 +27,8 @@ const contactItems = [
       </svg>
     ),
     label: "Telefon",
-    value: "+90 500 123 45 67",
-    href: "tel:+905001234567",
+    value: phone,
+    href: `tel:${formattedPhoneForHref}`,
   },
   {
     icon: (
@@ -42,8 +47,8 @@ const contactItems = [
       </svg>
     ),
     label: "E-posta",
-    value: "info@msyelektronik.com",
-    href: "mailto:info@msyelektronik.com",
+    value: email,
+    href: `mailto:${email}`,
   },
   {
     icon: (
@@ -67,7 +72,7 @@ const contactItems = [
       </svg>
     ),
     label: "Adres",
-    value: "Örnek Mah. Elektronik Cad. No:1, İstanbul",
+    value: address,
     href: "#",
   },
   {
@@ -91,8 +96,6 @@ const contactItems = [
     href: "#",
   },
 ];
-
-export default function ContactSection() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
