@@ -33,7 +33,7 @@ export async function checkForUpdates() {
 
     // 2. Güncelleme varsa bağımlılıkları kontrol et ve build al
     // Not: Bu işlem biraz uzun sürebilir.
-    const { stdout: buildOutput, stderr: buildError } = await execAsync("npm install && npm run build");
+    const { stdout: buildOutput, stderr: buildError } = await execAsync("npm install --include=dev && npm run build");
 
     // 3. PM2 restart işlemini 2 saniye sonra başlat (istemciye cevap döndükten sonra)
     setTimeout(() => {
