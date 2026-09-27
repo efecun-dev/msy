@@ -24,7 +24,7 @@ export default function SignOutButton() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="text-gray-400 hover:text-red-500 transition-colors"
+        className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"
         title="Çıkış Yap"
       >
         <LogOut className="w-5 h-5" />

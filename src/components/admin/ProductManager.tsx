@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Plus, Edit, Trash2, ImageIcon, X } from "lucide-react";
+import { Plus, Edit, Trash2, ImageIcon, X, ChevronUp, ChevronDown } from "lucide-react";
 import {
   createProduct,
   updateProduct,
@@ -17,6 +17,7 @@ import {
   Textarea,
   Switch,
   Badge,
+  Pagination,
 } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
 import { useRouter } from "next/navigation";
@@ -51,6 +52,55 @@ export default function ProductManager({
   const [catModalOpen, setCatModalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [savingCategories, setSavingCategories] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortKey, setSortKey] = useState<"name" | "category" | "price" | "stockCount" | "isActive">("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  const pageSize = 10;
+
+  const sortedProducts = [...initialProducts].sort((a, b) => {
+    let aVal = a[sortKey];
+    let bVal = b[sortKey];
+
+    if (sortKey === "price" || sortKey === "stockCount") {
+      aVal = Number(aVal) || 0;
+      bVal = Number(bVal) || 0;
+    } else if (sortKey === "isActive") {
+      aVal = aVal ? 1 : 0;
+      bVal = bVal ? 1 : 0;
+    } else {
+      aVal = aVal ? String(aVal).toLowerCase() : "";
+      bVal = bVal ? String(bVal).toLowerCase() : "";
+    }
+
+    if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
+    if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const paginatedProducts = sortedProducts.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const handleSort = (key: any) => {
+    if (sortKey === key) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortKey(key);
+      setSortOrder("asc");
+    }
+  };
+
+  const SortIcon = ({ columnKey }: { columnKey: string }) => {
+    if (sortKey !== columnKey) return null;
+    return sortOrder === "asc" ? (
+      <ChevronUp className="w-3.5 h-3.5 ml-1 inline" />
+    ) : (
+      <ChevronDown className="w-3.5 h-3.5 ml-1 inline" />
+    );
+  };
 
   const handleSaveCategories = async () => {
     setSavingCategories(true);
@@ -167,6 +217,15 @@ export default function ProductManager({
   };
 
   const handleSubmit = async () => {
+    if (!form.name || !form.price || !form.category) {
+      toast({
+        type: "error",
+        title: "Eksik Bilgi",
+        description: "Lütfen ürün adı, fiyat ve kategori alanlarını doldurun.",
+      });
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("name", form.name);
@@ -259,16 +318,41 @@ export default function ProductManager({
             <thead className="bg-panel-2 border-b border-panel-6 text-panel-11">
               <tr>
                 <th className="px-6 py-4 font-medium w-16">Fotoğraf</th>
-                <th className="px-6 py-4 font-medium">Ürün Adı</th>
-                <th className="px-6 py-4 font-medium">Kategori</th>
-                <th className="px-6 py-4 font-medium">Fiyat</th>
-                <th className="px-6 py-4 font-medium">Stok</th>
-                <th className="px-6 py-4 font-medium">Durum</th>
+                <th 
+                  className="px-6 py-4 font-medium cursor-pointer hover:text-brand-9 select-none"
+                  onClick={() => handleSort("name")}
+                >
+                  Ürün Adı <SortIcon columnKey="name" />
+                </th>
+                <th 
+                  className="px-6 py-4 font-medium cursor-pointer hover:text-brand-9 select-none"
+                  onClick={() => handleSort("category")}
+                >
+                  Kategori <SortIcon columnKey="category" />
+                </th>
+                <th 
+                  className="px-6 py-4 font-medium cursor-pointer hover:text-brand-9 select-none"
+                  onClick={() => handleSort("price")}
+                >
+                  Fiyat <SortIcon columnKey="price" />
+                </th>
+                <th 
+                  className="px-6 py-4 font-medium cursor-pointer hover:text-brand-9 select-none"
+                  onClick={() => handleSort("stockCount")}
+                >
+                  Stok <SortIcon columnKey="stockCount" />
+                </th>
+                <th 
+                  className="px-6 py-4 font-medium cursor-pointer hover:text-brand-9 select-none"
+                  onClick={() => handleSort("isActive")}
+                >
+                  Durum <SortIcon columnKey="isActive" />
+                </th>
                 <th className="px-6 py-4 font-medium text-right">İşlemler</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-panel-6 text-panel-12">
-              {initialProducts.map((p) => (
+              {paginatedProducts.map((p) => (
                 <tr key={p.id} className="hover:bg-panel-3 transition-colors">
                   <td className="px-6 py-4">
                     {p.imageUrl || (p.images && p.images.length > 0) ? (
@@ -328,6 +412,16 @@ export default function ProductManager({
             </tbody>
           </table>
         </div>
+        {initialProducts.length > pageSize && (
+          <div className="p-4 border-t border-panel-6 flex justify-center bg-panel-2">
+            <Pagination
+              current={currentPage}
+              total={initialProducts.length}
+              pageSize={pageSize}
+              onChange={setCurrentPage}
+            />
+          </div>
+        )}
       </div>
 
       <Modal
@@ -357,6 +451,7 @@ export default function ProductManager({
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
               options={categories.map((cat) => ({ label: cat, value: cat }))}
+              placeholder="Bir kategori seçiniz"
             />
             <Input
               label="Stok Miktarı"

@@ -482,7 +482,7 @@ export default function ManualQuoteModal({
                               <button
                                 type="button"
                                 onClick={() => handleRemoveItem(index)}
-                                className="p-1 text-panel-11 hover:text-red-500 rounded transition-colors"
+                                className="p-1 text-panel-11 hover:text-red-500 rounded transition-colors cursor-pointer"
                                 title="Kaldır"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
