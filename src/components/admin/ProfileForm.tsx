@@ -25,8 +25,12 @@ export default function ProfileForm() {
       });
 
       // Sign out after password change
-      setTimeout(() => {
-        signOut({ callbackUrl: "/dashboard/login" });
+      setTimeout(async () => {
+        try {
+          await signOut({ redirect: false });
+        } finally {
+          window.location.href = "/dashboard/login";
+        }
       }, 2000);
     } catch (error: any) {
       toast({

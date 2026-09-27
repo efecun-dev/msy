@@ -10,6 +10,9 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/dashboard/login",
   },
+  useSecureCookies:
+    process.env.NODE_ENV === "production" &&
+    process.env.NEXTAUTH_URL?.startsWith("https://"),
   providers: [
     CredentialsProvider({
       name: "Giriş Yap",
@@ -45,6 +48,16 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs without prepending baseUrl
+      if (url.startsWith("/")) return url;
+      try {
+        if (new URL(url).origin === baseUrl) return url;
+      } catch {
+        return baseUrl;
+      }
+      return baseUrl;
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

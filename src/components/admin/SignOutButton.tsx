@@ -11,7 +11,13 @@ export default function SignOutButton() {
 
   const handleSignOut = async () => {
     setLoading(true);
-    await signOut({ callbackUrl: "/dashboard/login" });
+    try {
+      await signOut({ redirect: false });
+      window.location.href = "/dashboard/login";
+    } catch (error) {
+      console.error("Sign out error:", error);
+      window.location.href = "/dashboard/login";
+    }
   };
 
   return (
