@@ -196,14 +196,12 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
                 </div>
               </div>
               {/* Marka Logoları (Sağ Üst Köşe) */}
-              <div className="flex flex-col items-end justify-center gap-2 pr-2 z-10">
-                 <div className="flex flex-col items-center border-b-2 border-red-600 pb-1 w-24">
-                   <span className="text-[26px] tracking-tighter italic font-black text-[#D3122A] leading-none">AUDIO</span>
-                   <span className="text-[7px] bg-[#D3122A] text-white px-1.5 py-0.5 rounded-sm font-bold mt-1">Görüntülü Diafonları</span>
+              <div className="flex flex-col items-end justify-center gap-3 pr-2 z-10">
+                 <div className="w-28 h-10 relative">
+                   <Image src="/audio.png" alt="Audio Diafon" fill className="object-contain object-right" priority />
                  </div>
-                 <div className="flex items-center text-[#D3122A] mt-2">
-                   <span className="text-[28px] font-black italic lowercase tracking-tighter leading-none">alhua</span>
-                   <span className="text-[6px] ml-1.5 text-slate-800 font-extrabold leading-tight">DAHUA<br/>TECHNOLOGY</span>
+                 <div className="w-28 h-8 relative">
+                   <Image src="/dahua.jpg" alt="Dahua Technology" fill className="object-contain object-right" priority />
                  </div>
               </div>
             </div>
