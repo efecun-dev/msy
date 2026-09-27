@@ -124,18 +124,18 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
             left: 10%;
             width: 80%;
             height: 50%;
-            z-index: -1;
+            z-index: 50;
             pointer-events: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0.1;
+            opacity: 0.12;
           }
           
           .watermark-image {
             width: 100%;
             height: auto;
-            transform: rotate(-35deg);
+            transform: rotate(-25deg);
           }
         }
       `}} />
@@ -143,8 +143,8 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
       <div id="quote-print-template" className="bg-white text-slate-900 font-sans w-full max-w-[210mm] mx-auto p-6 print:p-0 print:max-w-none shadow-sm print:shadow-none">
         
         {/* Filigran (Watermark) */}
-        <div className="watermark-container hidden print:flex absolute inset-0 opacity-10 pointer-events-none items-center justify-center rotate-[-35deg] scale-150 z-0">
-          <img src="/logo.png" alt="watermark" className="w-2/3 h-auto grayscale object-contain opacity-50" />
+        <div className="watermark-container hidden print:flex pointer-events-none items-center justify-center">
+          <img src="/logo.png" alt="watermark" className="watermark-image object-contain" />
         </div>
 
         <div className="relative z-10">
