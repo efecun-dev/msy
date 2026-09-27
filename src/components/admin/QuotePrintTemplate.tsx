@@ -44,6 +44,8 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
   );
   
   const generalTotal = Number(quote.totalAmount);
+  const kdvAmount = generalTotal - itemsSubtotal;
+  const hasKdv = kdvAmount > 0;
   
   // Tablonun dolu görünmesi için boş satırlar ekliyoruz (minimum 7 satır)
   const minRows = 7;
@@ -297,10 +299,18 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
 
             {/* Sağ Kısım (Toplamlar) */}
             <div className="border border-slate-300 rounded-xl p-5 w-full sm:w-[42%] text-[13px] shadow-sm bg-white">
-              <div className="flex justify-between mb-4 font-medium text-slate-600 pb-4 border-b border-slate-200">
+              <div className={`flex justify-between ${hasKdv ? "mb-2.5" : "mb-4 pb-4 border-b border-slate-200"} font-medium text-slate-600`}>
                 <span>Malzeme Toplamı</span>
                 <span className="font-semibold text-slate-800">{itemsSubtotal.toLocaleString("tr-TR", { minimumFractionDigits: 0 })} TL</span>
               </div>
+              
+              {hasKdv && (
+                <div className="flex justify-between mb-4 pb-4 border-b border-slate-200 font-medium text-slate-600">
+                  <span>+ %20 KDV</span>
+                  <span className="font-semibold text-slate-800">{kdvAmount.toLocaleString("tr-TR", { minimumFractionDigits: 0 })} TL</span>
+                </div>
+              )}
+
               <div className="flex justify-between mt-5 font-black text-[15px] text-slate-900">
                 <span>Genel Toplam</span>
                 <span className="text-brand-9 text-[17px]">{generalTotal.toLocaleString("tr-TR", { minimumFractionDigits: 0 })} TL</span>
