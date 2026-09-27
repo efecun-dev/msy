@@ -59,6 +59,7 @@ export default function ManualQuoteModal({
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
   const [note, setNote] = useState("");
   const [adminNote, setAdminNote] = useState("");
   const [status, setStatus] = useState<any>("PENDING");
@@ -152,6 +153,7 @@ export default function ManualQuoteModal({
     setCustomerName("");
     setCustomerPhone("");
     setCustomerEmail("");
+    setCustomerAddress("");
     setNote("");
     setAdminNote("");
     setStatus("PENDING");
@@ -186,6 +188,7 @@ export default function ManualQuoteModal({
         customerName,
         customerPhone,
         customerEmail,
+        customerAddress,
         note,
         adminNote,
         status,
@@ -350,6 +353,19 @@ export default function ManualQuoteModal({
                     <option value="NEGOTIATING">Görüşülüyor</option>
                     <option value="ACCEPTED">Kabul Edildi</option>
                   </select>
+                </div>
+
+                <div className="space-y-1 sm:col-span-2">
+                  <label className="text-[11px] font-semibold text-panel-11">
+                    Müşteri Adresi
+                  </label>
+                  <input
+                    type="text"
+                    value={customerAddress}
+                    onChange={(e) => setCustomerAddress(e.target.value)}
+                    placeholder="Fatura veya teslimat adresi..."
+                    className="w-full px-3 py-2 text-xs bg-panel-1 border border-panel-6 rounded-lg text-panel-12 placeholder-panel-9 focus:outline-none focus:border-brand-9"
+                  />
                 </div>
               </div>
 

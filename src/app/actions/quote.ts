@@ -24,6 +24,7 @@ export interface CreateManualQuoteInput {
   customerName: string;
   customerPhone?: string;
   customerEmail?: string;
+  customerAddress?: string;
   note?: string;
   adminNote?: string;
   status?: QuoteStatus;
@@ -74,6 +75,7 @@ export async function createManualQuote(data: CreateManualQuoteInput) {
       customerName: data.customerName.trim(),
       customerPhone: data.customerPhone?.trim() || "-",
       customerEmail: data.customerEmail?.trim() || null,
+      customerAddress: data.customerAddress?.trim() || null,
       note: data.note?.trim() || null,
       adminNote: data.adminNote?.trim() || null,
       status: data.status || "PENDING",
