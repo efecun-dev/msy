@@ -120,9 +120,9 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
           /* Watermark tüm sayfalarda ortalanmış şekilde görünsün */
           .watermark-container {
             position: fixed;
-            top: 30%;
-            left: 10%;
-            width: 80%;
+            top: 25%;
+            left: 0%;
+            width: 100%;
             height: 50%;
             z-index: 50;
             pointer-events: none;
@@ -133,9 +133,9 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
           }
           
           .watermark-image {
-            width: 100%;
+            width: 110%;
             height: auto;
-            transform: rotate(-25deg);
+            transform: scale(1.4) rotate(-35deg);
           }
         }
       `}} />
