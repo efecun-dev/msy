@@ -89,11 +89,43 @@ export async function getSystemInfo() {
   }
 
   // Get Git Commit Version
-  let appVersion = "v0.1.0 (Beta)";
+  let appVersion = "v1.0.0";
   try {
-    const { stdout } = await execAsync("git log -1 --format='%h (%ar)'");
+    const { stdout } = await execAsync('git log --format="%s"');
     if (stdout) {
-      appVersion = stdout.trim();
+      const commits = stdout.trim().split('\n');
+      
+      let major = 1;
+      let minor = 0;
+      let patch = 0;
+
+      for (const msg of commits.reverse()) {
+        const lowerMsg = msg.toLowerCase();
+        
+        if (lowerMsg.includes("initial commit")) {
+          continue;
+        }
+
+        if (lowerMsg.includes("major") || lowerMsg.includes("breaking")) {
+          major++;
+          minor = 0;
+          patch = 0;
+        } else if (
+          lowerMsg.includes("feat") || 
+          lowerMsg.includes("add") || 
+          lowerMsg.includes("ekle") || 
+          lowerMsg.includes("yeni") ||
+          lowerMsg.includes("update") ||
+          lowerMsg.includes("oluşturma")
+        ) {
+          minor++;
+          patch = 0;
+        } else {
+          patch++;
+        }
+      }
+
+      appVersion = `v${major}.${minor}.${patch}`;
     }
   } catch (e) {
     console.error("Git log hatası:", e);
