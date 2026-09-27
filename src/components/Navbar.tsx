@@ -90,12 +90,25 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
-            aria-label="Menüyü aç"
-          >
+          {/* Mobile Right Icons */}
+          <div className="flex items-center gap-4 md:hidden">
+            <Link
+              href="/cart"
+              className="relative text-gray-300 hover:text-white transition-colors duration-200"
+            >
+              <ShoppingCart className="w-5 h-5" />
+              {mounted && totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="p-1 rounded-md text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Menüyü aç"
+            >
             <svg
               className="w-6 h-6"
               fill="none"
@@ -119,6 +132,7 @@ export default function Navbar() {
               )}
             </svg>
           </button>
+          </div>
         </div>
       </div>
 
