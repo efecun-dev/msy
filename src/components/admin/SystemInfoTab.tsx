@@ -22,11 +22,13 @@ export default function SystemInfoTab() {
   const [uptime, setUptime] = useState("Hesaplanıyor...");
   const [updating, setUpdating] = useState(false);
   const [updateStep, setUpdateStep] = useState("");
+  const [updateProgress, setUpdateProgress] = useState(0);
   const [sysInfo, setSysInfo] = useState<any>(null);
   const { toast } = useToast();
 
   const handleUpdate = async () => {
     setUpdating(true);
+    setUpdateProgress(10);
     try {
       setUpdateStep("Güncelleme kontrol ediliyor...");
       const statusRes = await checkUpdateStatus();
@@ -35,23 +37,28 @@ export default function SystemInfoTab() {
         toast({ type: "success", title: "Sistem Güncel", description: statusRes.message });
         setUpdating(false);
         setUpdateStep("");
+        setUpdateProgress(0);
         return;
       }
       
+      setUpdateProgress(35);
       toast({ type: "info", title: "Güncelleme Bulundu", description: statusRes.message });
       setUpdateStep("Güncellemeler indiriliyor...");
       
       await pullUpdate();
       
+      setUpdateProgress(60);
       toast({ type: "info", title: "Güncelleme Çekildi", description: "Yeni dosyalar indirildi. Sistem derleniyor..." });
       setUpdateStep("Sistem derleniyor (bu işlem sürebilir)...");
       
       await buildUpdate();
       
+      setUpdateProgress(90);
       toast({ type: "success", title: "Derleme Tamamlandı", description: "Uygulama yeniden başlatılıyor." });
       setUpdateStep("Yeniden başlatılıyor...");
       
       await restartApp();
+      setUpdateProgress(100);
       
     } catch (error: any) {
       toast({
@@ -60,8 +67,12 @@ export default function SystemInfoTab() {
         description: error.message || "Bilinmeyen hata.",
       });
     } finally {
-      setUpdating(false);
-      setUpdateStep("");
+      // Yeniden başlatma işleminde animasyonun bitmesi için biraz bekleyelim
+      setTimeout(() => {
+        setUpdating(false);
+        setUpdateStep("");
+        setUpdateProgress(0);
+      }, 1500);
     }
   };
 
@@ -270,23 +281,46 @@ export default function SystemInfoTab() {
         <h4 className="text-sm font-bold text-panel-12 mb-4 uppercase tracking-wider">
           Yazılım Güncellemeleri
         </h4>
-        <div className="bg-panel-1 border border-panel-6 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold text-panel-12">
-              Otomatik Güncelleme Sistemi
-            </p>
-            <p className="text-xs text-panel-11 mt-1 max-w-lg">
-              GitHub üzerindeki en güncel kaynak kodlarını denetler, sistemi
-              derler ve PM2 üzerinden otomatik olarak yeniden başlatır.
-            </p>
+        <div className="bg-panel-1 border border-panel-6 rounded-xl p-5 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm font-bold text-panel-12">
+                Otomatik Güncelleme Sistemi
+              </p>
+              <p className="text-xs text-panel-11 mt-1 max-w-lg">
+                GitHub üzerindeki en güncel kaynak kodlarını denetler, sistemi
+                derler ve PM2 üzerinden otomatik olarak yeniden başlatır.
+              </p>
+            </div>
+            <Button
+              loading={updating}
+              onClick={handleUpdate}
+              leftIcon={<RefreshCw className={`w-4 h-4 ${updating ? "animate-spin" : ""}`} />}
+              disabled={updating}
+            >
+              {updating ? "İşlem Sürüyor..." : "Güncellemeleri Denetle"}
+            </Button>
           </div>
-          <Button
-            loading={updating}
-            onClick={handleUpdate}
-            leftIcon={<RefreshCw className={`w-4 h-4 ${updating ? "animate-spin" : ""}`} />}
-          >
-            {updating && updateStep ? updateStep : "Güncellemeleri Denetle"}
-          </Button>
+
+          {/* Progress Bar Container */}
+          {updating && (
+            <div className="mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className="text-xs font-semibold text-brand-11 animate-pulse">
+                  {updateStep}
+                </span>
+                <span className="text-xs font-bold text-panel-12">{updateProgress}%</span>
+              </div>
+              <div className="w-full bg-panel-3 rounded-full h-2.5 overflow-hidden relative border border-panel-6">
+                <div
+                  className="bg-brand-9 h-2.5 rounded-full transition-all duration-700 ease-in-out relative"
+                  style={{ width: `${updateProgress}%` }}
+                >
+                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]"></div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
