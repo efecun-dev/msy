@@ -299,13 +299,9 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
 
             {/* Sağ Kısım (Toplamlar) */}
             <div className="border border-slate-300 rounded-xl p-5 w-full sm:w-[42%] text-[13px] shadow-sm bg-white">
-              <div className="flex justify-between mb-4 font-medium text-slate-600">
+              <div className="flex justify-between mb-4 font-medium text-slate-600 pb-4 border-b border-slate-200">
                 <span>Malzeme Toplamı</span>
                 <span className="font-semibold text-slate-800">{itemsSubtotal.toLocaleString("tr-TR", { minimumFractionDigits: 0 })} TL</span>
-              </div>
-              <div className="flex justify-between mb-4 font-medium text-slate-600 pb-4 border-b border-slate-200">
-                <span>İşçilik Toplamı</span>
-                <span className="font-semibold text-slate-800">- TL</span>
               </div>
               <div className="flex justify-between mt-5 font-black text-[15px] text-slate-900">
                 <span>Genel Toplam</span>
