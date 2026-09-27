@@ -24,10 +24,10 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
           variant="outline"
           size="sm"
           onClick={() => setPreviewOpen(true)}
-          className="flex items-center gap-1.5 text-xs text-panel-11 hover:text-panel-12"
+          className="text-xs text-panel-11 hover:text-panel-12"
           title="PDF Belgesini Önizle"
+          leftIcon={<Eye className="w-4 h-4" />}
         >
-          <Eye className="w-3.5 h-3.5" />
           <span className="hidden sm:inline">PDF Önizle</span>
         </Button>
 
@@ -36,10 +36,10 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
           variant="primary"
           size="sm"
           onClick={handlePrint}
-          className="flex items-center gap-1.5 text-xs bg-brand-9 hover:bg-brand-10 text-white font-semibold"
+          className="text-xs bg-brand-9 hover:bg-brand-10 text-white font-semibold"
           title="Yazdır veya PDF olarak kaydet"
+          leftIcon={<Printer className="w-4 h-4" />}
         >
-          <Printer className="w-3.5 h-3.5" />
           <span>Yazdır / PDF İndir</span>
         </Button>
       </div>
