@@ -88,6 +88,17 @@ export async function getSystemInfo() {
     console.error("Disk stat hatası:", e);
   }
 
+  // Get Git Commit Version
+  let appVersion = "v0.1.0 (Beta)";
+  try {
+    const { stdout } = await execAsync("git log -1 --format='%h (%ar)'");
+    if (stdout) {
+      appVersion = stdout.trim();
+    }
+  } catch (e) {
+    console.error("Git log hatası:", e);
+  }
+
   return {
     cpuModel,
     cpuCores: cpus.length,
@@ -97,7 +108,8 @@ export async function getSystemInfo() {
     freeDisk,
     uptime: os.uptime(),
     env: process.env.NODE_ENV || "development",
-    nextVersion
+    nextVersion,
+    appVersion
   };
 }
 

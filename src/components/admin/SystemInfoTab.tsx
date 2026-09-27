@@ -235,7 +235,7 @@ export default function SystemInfoTab() {
           <div className="border-t border-panel-6 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-panel-6">
             <div className="p-4">
               <p className="text-xs text-panel-11 mb-1">Yazılım Sürümü</p>
-              <p className="text-sm font-medium text-panel-12">v0.1.0 (Beta)</p>
+              <p className="text-sm font-medium text-panel-12">{sysInfo?.appVersion || "Yükleniyor..."}</p>
             </div>
             <div className="p-4">
               <p className="text-xs text-panel-11 mb-1">Altyapı (Framework)</p>
