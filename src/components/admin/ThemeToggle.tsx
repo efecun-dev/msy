@@ -19,7 +19,7 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="p-2 rounded-lg text-panel-11 hover:text-panel-12 hover:bg-panel-3 transition-colors"
+      className="p-2 rounded-lg text-panel-11 hover:text-panel-12 hover:bg-panel-3 transition-colors cursor-pointer"
       title="Temayı Değiştir"
     >
       {theme === "dark" ? (

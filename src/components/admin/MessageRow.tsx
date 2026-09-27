@@ -51,7 +51,7 @@ export default function MessageRow({ message }: { message: any }) {
               </span>
             </div>
             <div className="text-xs font-medium text-brand-11 mb-2">
-              <a href={`mailto:${message.email}`} className="hover:underline">
+              <a href={`mailto:${message.email}`} className="hover:underline cursor-pointer">
                 {message.email}
               </a>
             </div>
@@ -67,7 +67,7 @@ export default function MessageRow({ message }: { message: any }) {
           <button
             onClick={handleMarkRead}
             disabled={loading}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-panel-2 hover:bg-panel-3 border border-panel-6 rounded text-xs font-semibold text-panel-12 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-panel-2 hover:bg-panel-3 border border-panel-6 rounded text-xs font-semibold text-panel-12 transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
           >
             <CheckCircle className="w-3.5 h-3.5 text-green-500" />
             Okundu İşaretle

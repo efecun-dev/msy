@@ -311,13 +311,13 @@ export default function ProductManager({
                     <div className="flex justify-end gap-2">
                       <button
                         onClick={() => openEdit(p)}
-                        className="p-2 text-panel-11 hover:text-brand-11 transition-colors"
+                        className="p-2 text-panel-11 hover:text-brand-11 transition-colors cursor-pointer"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(p.id)}
-                        className="p-2 text-panel-11 hover:text-red-500 transition-colors"
+                        className="p-2 text-panel-11 hover:text-red-500 transition-colors cursor-pointer"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -393,7 +393,7 @@ export default function ProductManager({
                     />
                     <button
                       onClick={() => handleDeleteExistingImage(img.id)}
-                      className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -493,7 +493,7 @@ export default function ProductManager({
                 <button
                   type="button"
                   onClick={() => removeCategory(cat)}
-                  className="text-red-500 hover:text-red-600 p-1 rounded-md hover:bg-red-500/10 transition-colors"
+                  className="text-red-500 hover:text-red-600 p-1 rounded-md hover:bg-red-500/10 transition-colors cursor-pointer"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

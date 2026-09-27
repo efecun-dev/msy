@@ -35,7 +35,7 @@ export default function NotificationBell({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`p-2 rounded-lg transition-colors relative ${
+        className={`p-2 rounded-lg transition-colors relative cursor-pointer ${
           isOpen
             ? "bg-panel-3 text-panel-12"
             : "hover:text-panel-12 hover:bg-panel-3 text-panel-11"
@@ -66,7 +66,7 @@ export default function NotificationBell({
                   <Link
                     href="/dashboard/quotes"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-start gap-3 p-4 hover:bg-panel-3 transition-colors"
+                    className="flex items-start gap-3 p-4 hover:bg-panel-3 transition-colors cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full bg-brand-3 text-brand-11 flex items-center justify-center shrink-0 mt-0.5">
                       <FileText className="w-4 h-4" />
@@ -86,7 +86,7 @@ export default function NotificationBell({
                   <Link
                     href="/dashboard/messages"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-start gap-3 p-4 hover:bg-panel-3 transition-colors"
+                    className="flex items-start gap-3 p-4 hover:bg-panel-3 transition-colors cursor-pointer"
                   >
                     <div className="w-8 h-8 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 mt-0.5">
                       <Mail className="w-4 h-4" />

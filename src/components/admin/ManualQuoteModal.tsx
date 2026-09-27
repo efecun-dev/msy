@@ -559,7 +559,7 @@ export default function ManualQuoteModal({
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-2.5 text-panel-10 hover:text-panel-12"
+                  className="absolute right-2.5 top-2.5 text-panel-10 hover:text-panel-12 cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -572,7 +572,7 @@ export default function ManualQuoteModal({
                 <button
                   type="button"
                   onClick={() => setSelectedCategory("ALL")}
-                  className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors ${selectedCategory === "ALL"
+                  className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === "ALL"
                     ? "bg-brand-9 text-white font-semibold"
                     : "bg-panel-3 text-panel-11 hover:text-panel-12"
                     }`}
@@ -584,7 +584,7 @@ export default function ManualQuoteModal({
                     key={cat}
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors ${selectedCategory === cat
+                    className={`px-2 py-0.5 rounded-full whitespace-nowrap transition-colors cursor-pointer ${selectedCategory === cat
                       ? "bg-brand-9 text-white font-semibold"
                       : "bg-panel-3 text-panel-11 hover:text-panel-12"
                       }`}
@@ -649,7 +649,7 @@ export default function ManualQuoteModal({
                       <button
                         type="button"
                         onClick={() => handleAddProduct(product)}
-                        className={`px-2.5 py-1 text-xs rounded-lg font-medium transition-all shrink-0 flex items-center gap-1 ${isAlreadyAdded
+                        className={`px-2.5 py-1 text-xs rounded-lg font-medium transition-all shrink-0 flex items-center gap-1 cursor-pointer ${isAlreadyAdded
                           ? "bg-brand-3 text-brand-11 border border-brand-7 hover:bg-brand-4"
                           : "bg-panel-1 border border-panel-6 text-panel-12 hover:bg-brand-9 hover:text-white hover:border-brand-9"
                           }`}

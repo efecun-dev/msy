@@ -59,7 +59,7 @@ export default function SidebarNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-2.5 px-3 py-2 rounded-md font-medium text-sm transition-colors ${
+            className={`flex items-center gap-2.5 px-3 py-2 rounded-md font-medium text-sm transition-colors cursor-pointer ${
               isActive
                 ? "bg-brand-3 text-brand-11"
                 : "text-panel-11 hover:bg-panel-3 hover:text-panel-12"

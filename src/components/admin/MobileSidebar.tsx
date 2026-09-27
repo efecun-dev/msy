@@ -21,7 +21,7 @@ export default function MobileSidebar({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden p-2 mr-2 text-panel-11 hover:text-panel-12 hover:bg-panel-3 rounded-lg"
+        className="md:hidden p-2 mr-2 text-panel-11 hover:text-panel-12 hover:bg-panel-3 rounded-lg cursor-pointer"
       >
         <Menu className="w-5 h-5" />
       </button>
@@ -29,7 +29,7 @@ export default function MobileSidebar({
       {/* Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm"
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm cursor-pointer"
           onClick={() => setIsOpen(false)}
         />
       )}
@@ -51,7 +51,7 @@ export default function MobileSidebar({
           </div>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 text-panel-11 hover:text-panel-12 hover:bg-panel-3 rounded-lg"
+            className="p-2 text-panel-11 hover:text-panel-12 hover:bg-panel-3 rounded-lg cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
