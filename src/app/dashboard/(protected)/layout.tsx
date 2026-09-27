@@ -13,7 +13,6 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import SidebarNav from "@/components/admin/SidebarNav";
 import SignOutButton from "@/components/admin/SignOutButton";
-import ThemeToggle from "@/components/admin/ThemeToggle";
 import MobileSidebar from "@/components/admin/MobileSidebar";
 import TopSearchBar from "@/components/admin/TopSearchBar";
 import NotificationBell from "@/components/admin/NotificationBell";
@@ -87,7 +86,6 @@ export default async function DashboardLayout({
             <TopSearchBar />
           </div>
           <div className="flex items-center gap-2 text-panel-11 shrink-0">
-            <ThemeToggle />
             <Link
               href="/dashboard/settings"
               className="p-2 hover:text-panel-12 hover:bg-panel-3 rounded-lg transition-colors"

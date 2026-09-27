@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import SidebarNav from "./SidebarNav";
 import SignOutButton from "./SignOutButton";
-import ThemeToggle from "./ThemeToggle";
 
 interface MobileSidebarProps {
   userName?: string | null;
