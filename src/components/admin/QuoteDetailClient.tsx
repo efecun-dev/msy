@@ -109,7 +109,8 @@ export default function QuoteDetailClient({
               quoteToEdit={quote}
               triggerButton={
                 <Button
-                  className="w-full bg-panel-3 hover:bg-panel-4 text-panel-12"
+                  variant="ghost"
+                  className="w-full bg-panel-2 border border-panel-6 hover:bg-panel-3 text-panel-12 hover:text-panel-12 shadow-sm"
                   size="sm"
                   leftIcon={<Edit className="w-4 h-4" />}
                 >
@@ -136,7 +137,8 @@ export default function QuoteDetailClient({
                 }
               }}
               loading={isDeleting}
-              className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-600 border border-red-500/20"
+              variant="ghost"
+              className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-600 hover:text-red-700 border border-red-500/20"
               size="sm"
               leftIcon={<Trash2 className="w-4 h-4" />}
             >
