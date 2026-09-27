@@ -77,9 +77,9 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
                   setPreviewOpen(false);
                   setTimeout(() => window.print(), 300);
                 }}
-                className="bg-brand-9 hover:bg-brand-10 text-white flex items-center gap-1.5"
+                className="bg-brand-9 hover:bg-brand-10 text-white"
+                leftIcon={<Printer className="w-4 h-4" />}
               >
-                <Printer className="w-4 h-4" />
                 <span>Yazdır / PDF Olarak Kaydet</span>
               </Button>
             </div>
