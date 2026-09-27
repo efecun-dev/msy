@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { Modal, Button, Input, Textarea, Select, Badge } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
-import { createManualQuote } from "@/app/actions/quote";
+import { createManualQuote, updateManualQuote } from "@/app/actions/quote";
 import Image from "next/image";
 
 interface ProductItem {
@@ -43,11 +43,15 @@ interface SelectedItem {
 interface ManualQuoteModalProps {
   products: ProductItem[];
   categories?: string[];
+  quoteToEdit?: any;
+  triggerButton?: React.ReactNode;
 }
 
 export default function ManualQuoteModal({
   products = [],
   categories = [],
+  quoteToEdit = null,
+  triggerButton,
 }: ManualQuoteModalProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -55,18 +59,31 @@ export default function ManualQuoteModal({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const isEditMode = !!quoteToEdit;
+
   // Form State
-  const [customerName, setCustomerName] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [customerEmail, setCustomerEmail] = useState("");
-  const [customerAddress, setCustomerAddress] = useState("");
-  const [note, setNote] = useState("");
-  const [adminNote, setAdminNote] = useState("");
-  const [status, setStatus] = useState<any>("PENDING");
+  const [customerName, setCustomerName] = useState(quoteToEdit?.customerName || "");
+  const [customerPhone, setCustomerPhone] = useState(quoteToEdit?.customerPhone || "");
+  const [customerEmail, setCustomerEmail] = useState(quoteToEdit?.customerEmail || "");
+  const [customerAddress, setCustomerAddress] = useState(quoteToEdit?.customerAddress || "");
+  const [note, setNote] = useState(quoteToEdit?.note || "");
+  const [adminNote, setAdminNote] = useState(quoteToEdit?.adminNote || "");
+  const [status, setStatus] = useState<any>(quoteToEdit?.status || "PENDING");
   const [includeKdv, setIncludeKdv] = useState(true);
 
+  // Initialize selected items from quoteToEdit if available
+  const initialItems = useMemo(() => {
+    if (!quoteToEdit?.items) return [];
+    return quoteToEdit.items.map((item: any) => ({
+      productId: item.productId,
+      product: products.find((p) => p.id === item.productId) || item.product,
+      quantity: item.quantity,
+      unitPrice: Number(item.unitPrice),
+    }));
+  }, [quoteToEdit, products]);
+
   // Selected Products State
-  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(initialItems);
 
   // Product Search / Filter
   const [searchQuery, setSearchQuery] = useState("");
@@ -184,7 +201,7 @@ export default function ManualQuoteModal({
 
     setLoading(true);
     try {
-      const result = await createManualQuote({
+      const payload = {
         customerName,
         customerPhone,
         customerEmail,
@@ -198,24 +215,33 @@ export default function ManualQuoteModal({
           quantity: item.quantity,
           unitPrice: item.unitPrice,
         })),
-      });
+      };
+
+      let result;
+      if (isEditMode) {
+        result = await updateManualQuote(quoteToEdit.id, payload);
+      } else {
+        result = await createManualQuote(payload);
+      }
 
       if (result.success && result.quote) {
         toast({
           type: "success",
-          title: "Teklif Oluşturuldu",
-          description: `#${result.quote.quoteNumber} nolu teklif başarıyla oluşturuldu.`,
+          title: isEditMode ? "Teklif Güncellendi" : "Teklif Oluşturuldu",
+          description: `#${result.quote.quoteNumber} nolu teklif başarıyla ${isEditMode ? "güncellendi" : "oluşturuldu"}.`,
         });
         setOpen(false);
-        resetForm();
-        router.push(`/dashboard/quotes/${result.quote.id}`);
+        if (!isEditMode) {
+          resetForm();
+          router.push(`/dashboard/quotes/${result.quote.id}`);
+        }
         router.refresh();
       }
     } catch (error: any) {
       toast({
         type: "error",
         title: "Hata",
-        description: error.message || "Teklif oluşturulurken bir hata meydana geldi.",
+        description: error.message || (isEditMode ? "Teklif güncellenirken bir hata meydana geldi." : "Teklif oluşturulurken bir hata meydana geldi."),
       });
     } finally {
       setLoading(false);
@@ -225,14 +251,17 @@ export default function ManualQuoteModal({
   return (
     <>
       {/* ─── Modal Açma Butonu ────────────────────────────────────────────── */}
-      <Button
-        onClick={() => setOpen(true)}
-        className="gap-2 bg-brand-9 hover:bg-brand-10 text-white font-semibold shadow-sm"
-        size="sm"
-        leftIcon={<Plus className="w-4 h-4" />}
-      >
-        Yeni Teklif Oluştur
-      </Button>
+      <div onClick={() => setOpen(true)} className="inline-block">
+        {triggerButton || (
+          <Button
+            className="gap-2 bg-brand-9 hover:bg-brand-10 text-white font-semibold shadow-sm"
+            size="sm"
+            leftIcon={<Plus className="w-4 h-4" />}
+          >
+            Yeni Teklif Oluştur
+          </Button>
+        )}
+      </div>
 
       {/* ─── Manuel Teklif Modalı ─────────────────────────────────────────── */}
       <Modal
@@ -245,7 +274,7 @@ export default function ManualQuoteModal({
             </div>
             <div>
               <span className="text-base font-bold text-panel-12">
-                Manuel Teklif Oluştur
+                {isEditMode ? "Teklifi Düzenle" : "Manuel Teklif Oluştur"}
               </span>
               <p className="text-xs text-panel-11 font-normal">
                 Müşteri bilgilerini girin, ürünleri seçip dilediğiniz özel birim fiyatı belirleyin.
@@ -282,7 +311,7 @@ export default function ManualQuoteModal({
                 className="gap-2 bg-brand-9 hover:bg-brand-10 text-white"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                Teklifi Kaydet & Görüntüle
+                {isEditMode ? "Değişiklikleri Kaydet" : "Teklifi Kaydet & Görüntüle"}
               </Button>
             </div>
           </div>

@@ -10,20 +10,38 @@ export default async function QuoteDetailPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
-  const quote = await prisma.quote.findUnique({
-    where: { id: parseInt(params.id) },
-    include: {
-      items: {
-        include: {
-          product: {
-            include: {
-              images: true,
+  const [quote, products] = await Promise.all([
+    prisma.quote.findUnique({
+      where: { id: parseInt(params.id) },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                images: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.product.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        name: true,
+        category: true,
+        price: true,
+        imageUrl: true,
+        inStock: true,
+        stockCount: true,
+        images: {
+          select: { url: true },
+        },
+      },
+      orderBy: { name: "asc" },
+    }),
+  ]);
 
   if (!quote) return notFound();
 
@@ -40,6 +58,11 @@ export default async function QuoteDetailPage(props: {
       },
     })),
   };
+
+  const serializedProducts = products.map((p) => ({
+    ...p,
+    price: Number(p.price),
+  }));
 
   return (
     <>
@@ -264,6 +287,8 @@ export default async function QuoteDetailPage(props: {
                 quoteId={quote.id}
                 initialStatus={quote.status}
                 initialAdminNote={quote.adminNote}
+                quote={serializedQuote}
+                products={serializedProducts}
               />
             </div>
           </div>
