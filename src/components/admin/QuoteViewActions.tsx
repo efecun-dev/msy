@@ -12,8 +12,18 @@ interface QuoteViewActionsProps {
 export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const handlePrint = () => {
+  const doPrint = () => {
+    const originalTitle = document.title;
+    document.title = quote.customerName || `Teklif-${quote.quoteNumber}`;
     window.print();
+    // Revert title immediately after print dialog opens
+    setTimeout(() => {
+      document.title = originalTitle;
+    }, 500);
+  };
+
+  const handlePrint = () => {
+    doPrint();
   };
 
   return (
@@ -75,7 +85,7 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
                 size="sm"
                 onClick={() => {
                   setPreviewOpen(false);
-                  setTimeout(() => window.print(), 300);
+                  setTimeout(() => doPrint(), 300);
                 }}
                 className="bg-brand-9 hover:bg-brand-10 text-white"
                 leftIcon={<Printer className="w-4 h-4" />}
