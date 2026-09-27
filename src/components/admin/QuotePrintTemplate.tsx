@@ -285,16 +285,16 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
             {/* Sol Kısım (Notlar) */}
             <div className="border border-slate-300 rounded-xl p-4 w-full sm:w-[55%] min-h-[160px] flex flex-col bg-slate-50 shadow-sm relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600"></div>
-              <p className="text-red-600 font-extrabold text-[12px] mb-4 pl-2">NOT: FİYATLARIMIZ KDV DAHİL DEĞİLDİR.</p>
-              
-              <ul className="list-disc pl-6 space-y-2 text-slate-600 font-medium text-[11px]">
-                <li>Montaj ve kurulum hizmeti fiyata dahil değildir.</li>
-                <li>Ürünlerimiz 2 yıl üretici garantisi altındadır.</li>
-                <li>Teklif onayından itibaren 15 gün geçerlidir.</li>
-                {quote.note && (
-                   <li className="text-slate-800 mt-2 italic font-semibold">Özel Not: {quote.note}</li>
-                )}
-              </ul>
+              {quote.note ? (
+                <>
+                  <p className="text-red-600 font-extrabold text-[12px] mb-2 pl-2 uppercase">Teklif Notu</p>
+                  <p className="text-slate-700 font-medium text-[12px] pl-2 whitespace-pre-wrap leading-relaxed">{quote.note}</p>
+                </>
+              ) : (
+                <div className="flex flex-1 items-center justify-center h-full text-slate-400 text-[11px] italic">
+                  Bu teklife ait ek not bulunmamaktadır.
+                </div>
+              )}
             </div>
 
             {/* Sağ Kısım (Toplamlar) */}
