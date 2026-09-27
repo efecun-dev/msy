@@ -142,7 +142,7 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
         }
       `}} />
 
-      <div id="quote-print-template" className="bg-white text-slate-900 font-sans w-full max-w-[210mm] mx-auto p-6 print:p-0 print:max-w-none shadow-sm print:shadow-none">
+      <div id="quote-print-template" className="bg-white text-slate-900 font-sans w-full max-w-[210mm] mx-auto p-6 print:p-0 print:max-w-none">
         
         {/* Filigran (Watermark) */}
         <div className="watermark-container hidden print:flex pointer-events-none items-center justify-center">
@@ -177,7 +177,7 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
           </div>
 
           {/* Müşteri Bilgileri */}
-          <div className="border border-slate-300 rounded-xl mb-6 bg-white overflow-hidden shadow-sm">
+          <div className="border border-slate-300 rounded-xl mb-6 bg-white overflow-hidden">
             <div className="font-bold text-[13px] border-b border-slate-300 p-2.5 px-4 bg-slate-50 text-slate-800 flex items-center justify-between">
               <span>MÜŞTERİ BİLGİLERİ</span>
               <span className="text-[10px] text-slate-400 font-normal">Teklif No: #{quote.quoteNumber}</span>
@@ -210,7 +210,7 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
           </div>
 
           {/* Tablo */}
-          <div className="w-full mb-6 rounded-xl overflow-hidden border border-slate-300 shadow-sm bg-white">
+          <div className="w-full mb-6 rounded-xl overflow-hidden border border-slate-300 bg-white">
             <table className="w-full border-collapse text-[11px] text-center">
               <thead className="bg-[#eaf4fb] border-b border-slate-300">
                 <tr>
@@ -283,7 +283,7 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
           {/* Alt Kısım (Notlar ve Toplamlar) */}
           <div className="flex flex-col sm:flex-row justify-between items-start print-break-inside-avoid gap-6">
             {/* Sol Kısım (Notlar) */}
-            <div className="border border-slate-300 rounded-xl p-4 w-full sm:w-[55%] min-h-[160px] flex flex-col bg-slate-50 shadow-sm relative overflow-hidden">
+            <div className="border border-slate-300 rounded-xl p-4 w-full sm:w-[55%] min-h-[160px] flex flex-col bg-slate-50 relative overflow-hidden">
               <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-red-600"></div>
               {quote.note ? (
                 <>
@@ -298,7 +298,7 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
             </div>
 
             {/* Sağ Kısım (Toplamlar) */}
-            <div className="border border-slate-300 rounded-xl p-5 w-full sm:w-[42%] text-[13px] shadow-sm bg-white">
+            <div className="border border-slate-300 rounded-xl p-5 w-full sm:w-[42%] text-[13px] bg-white">
               <div className={`flex justify-between ${hasKdv ? "mb-2.5" : "mb-4 pb-4 border-b border-slate-200"} font-medium text-slate-600`}>
                 <span>Malzeme Toplamı</span>
                 <span className="font-semibold text-slate-800">{itemsSubtotal.toLocaleString("tr-TR", { minimumFractionDigits: 0 })} TL</span>
