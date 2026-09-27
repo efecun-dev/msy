@@ -15,46 +15,52 @@ async function checkAuth() {
   return session;
 }
 
-export async function checkForUpdates() {
+export async function checkUpdateStatus() {
   await checkAuth();
-
   try {
-    // 1. Git pull yap
-    const { stdout: pullOutput, stderr: pullError } = await execAsync("git pull");
-
-    // Zaten güncel mi kontrol et
-    if (pullOutput.includes("Already up to date") || pullOutput.includes("Güncel")) {
-      return {
-        status: "up_to_date",
-        message: "Sistem zaten en güncel sürümde çalışıyor.",
-        logs: pullOutput
-      };
+    await execAsync("git fetch");
+    const { stdout } = await execAsync("git status -uno");
+    if (stdout.includes("Your branch is behind") || stdout.includes("git pull")) {
+      return { hasUpdate: true, message: "Yeni bir güncelleme bulundu!" };
     }
-
-    // 2. Güncelleme varsa bağımlılıkları kontrol et ve build al
-    // Not: Bu işlem biraz uzun sürebilir.
-    const { stdout: buildOutput, stderr: buildError } = await execAsync("npm install --include=dev && npm run build");
-
-    // 3. PM2 restart işlemini 2 saniye sonra başlat (istemciye cevap döndükten sonra)
-    setTimeout(() => {
-      exec("pm2 restart msy-app", (err, stdout, stderr) => {
-        if (err) {
-          console.error("PM2 restart hatası:", err);
-        }
-      });
-    }, 2000);
-
-    return {
-      status: "updated",
-      message: "Güncelleme başarıyla çekildi ve derlendi. Sunucu şimdi yeniden başlatılıyor...",
-      logs: pullOutput + "\n" + buildOutput
-    };
+    return { hasUpdate: false, message: "Sistem zaten en güncel sürümde." };
   } catch (error: any) {
-    console.error("Güncelleme hatası:", error);
-    return {
-      status: "error",
-      message: "Güncelleme sırasında bir hata oluştu: " + (error.message || String(error)),
-    };
+    throw new Error("Güncelleme kontrolü başarısız: " + error.message);
+  }
+}
+
+export async function pullUpdate() {
+  await checkAuth();
+  try {
+    const { stdout } = await execAsync("git pull");
+    return { success: true, message: "Güncellemeler başarıyla indirildi.", logs: stdout };
+  } catch (error: any) {
+    throw new Error("Güncelleme çekilirken hata oluştu: " + error.message);
+  }
+}
+
+export async function buildUpdate() {
+  await checkAuth();
+  try {
+    const { stdout } = await execAsync("npm install --include=dev && npm run build");
+    return { success: true, message: "Sistem başarıyla derlendi ve hazırlandı.", logs: stdout };
+  } catch (error: any) {
+    throw new Error("Derleme sırasında hata oluştu: " + error.message);
+  }
+}
+
+export async function restartApp() {
+  await checkAuth();
+  try {
+    // Restart PM2 asynchronously so it doesn't kill the current request immediately
+    setTimeout(() => {
+      exec("pm2 restart msy-app", (err) => {
+        if (err) console.error("PM2 restart hatası:", err);
+      });
+    }, 1500);
+    return { success: true, message: "Sunucu yeniden başlatılıyor..." };
+  } catch (error: any) {
+    throw new Error("Yeniden başlatma başarısız: " + error.message);
   }
 }
 

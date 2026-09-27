@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui";
 import { useToast } from "@/components/ui/Toast";
-import { checkForUpdates, getSystemInfo } from "@/app/actions/system";
+import { checkUpdateStatus, pullUpdate, buildUpdate, restartApp, getSystemInfo } from "@/app/actions/system";
 
 export default function SystemInfoTab() {
   const [mounted, setMounted] = useState(false);
@@ -21,28 +21,38 @@ export default function SystemInfoTab() {
   const [memUsage, setMemUsage] = useState(45);
   const [uptime, setUptime] = useState("Hesaplanıyor...");
   const [updating, setUpdating] = useState(false);
+  const [updateStep, setUpdateStep] = useState("");
   const [sysInfo, setSysInfo] = useState<any>(null);
   const { toast } = useToast();
 
   const handleUpdate = async () => {
     setUpdating(true);
     try {
-      const res = await checkForUpdates();
-      if (res.status === "up_to_date") {
-        toast({
-          type: "success",
-          title: "Sistem Güncel",
-          description: res.message,
-        });
-      } else if (res.status === "updated") {
-        toast({
-          type: "success",
-          title: "Güncelleniyor",
-          description: res.message,
-        });
-      } else {
-        toast({ type: "error", title: "Hata", description: res.message });
+      setUpdateStep("Güncelleme kontrol ediliyor...");
+      const statusRes = await checkUpdateStatus();
+      
+      if (!statusRes.hasUpdate) {
+        toast({ type: "success", title: "Sistem Güncel", description: statusRes.message });
+        setUpdating(false);
+        setUpdateStep("");
+        return;
       }
+      
+      toast({ type: "info", title: "Güncelleme Bulundu", description: statusRes.message });
+      setUpdateStep("Güncellemeler indiriliyor...");
+      
+      await pullUpdate();
+      
+      toast({ type: "info", title: "Güncelleme Çekildi", description: "Yeni dosyalar indirildi. Sistem derleniyor..." });
+      setUpdateStep("Sistem derleniyor (bu işlem sürebilir)...");
+      
+      await buildUpdate();
+      
+      toast({ type: "success", title: "Derleme Tamamlandı", description: "Uygulama yeniden başlatılıyor." });
+      setUpdateStep("Yeniden başlatılıyor...");
+      
+      await restartApp();
+      
     } catch (error: any) {
       toast({
         type: "error",
@@ -51,6 +61,7 @@ export default function SystemInfoTab() {
       });
     } finally {
       setUpdating(false);
+      setUpdateStep("");
     }
   };
 
@@ -272,9 +283,9 @@ export default function SystemInfoTab() {
           <Button
             loading={updating}
             onClick={handleUpdate}
-            leftIcon={<RefreshCw className="w-4 h-4" />}
+            leftIcon={<RefreshCw className={`w-4 h-4 ${updating ? "animate-spin" : ""}`} />}
           >
-            Güncellemeleri Denetle
+            {updating && updateStep ? updateStep : "Güncellemeleri Denetle"}
           </Button>
         </div>
       </div>
