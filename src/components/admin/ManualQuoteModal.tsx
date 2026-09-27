@@ -224,7 +224,7 @@ export default function ManualQuoteModal({
       {/* ─── Modal Açma Butonu ────────────────────────────────────────────── */}
       <Button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 bg-brand-9 hover:bg-brand-10 text-white font-semibold shadow-sm"
+        className="flex! items-center! gap-2 bg-brand-9 hover:bg-brand-10 text-white font-semibold shadow-sm"
         size="sm"
       >
         <Plus className="w-4 h-4" />
@@ -276,7 +276,7 @@ export default function ManualQuoteModal({
                 variant="primary"
                 onClick={handleSubmit}
                 loading={loading}
-                className="bg-brand-9 hover:bg-brand-10 text-white flex items-center gap-2"
+                className="bg-brand-9 hover:bg-brand-10 text-white flex! items-center! gap-2"
               >
                 <p>Teklifi Kaydet & Görüntüle</p>
                 <ArrowRight className="w-4 h-4" />
