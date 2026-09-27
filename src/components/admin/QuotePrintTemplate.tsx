@@ -180,10 +180,10 @@ export default function QuotePrintTemplate({ quote }: QuotePrintTemplateProps) {
                 </tr>
               </thead>
               <tbody>
-                {paddedItems.map((item, idx) => {
+                {paddedItems.map((item: any, idx) => {
                   if (item._isEmpty) {
                     return (
-                      <tr key={\`empty-\${idx}\`} className="h-[60px]">
+                      <tr key={`empty-${idx}`} className="h-[60px]">
                         <td className="border border-black"></td>
                         <td className="border border-black"></td>
                         <td className="border border-black"></td>
