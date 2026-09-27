@@ -43,7 +43,7 @@ export default function NotificationBell({
       >
         <Bell className="w-5 h-5" />
         {totalNotifications > 0 && (
-          <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-red-500 rounded-full border-2 border-panel-1 text-[8px] font-bold text-white flex items-center justify-center">
+          <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-panel-1 text-[8px] font-bold text-white flex items-center justify-center">
             {totalNotifications > 9 ? "9+" : totalNotifications}
           </span>
         )}
