@@ -14,7 +14,8 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
 
   const doPrint = () => {
     const originalTitle = document.title;
-    document.title = quote.customerName || `Teklif-${quote.quoteNumber}`;
+    const safeCustomer = (quote.customerName || "Teklif").replace(/[\/\\:*?"<>|]/g, "_");
+    document.title = `${safeCustomer}_Teklif_${quote.quoteNumber}`;
     window.print();
     // Revert title immediately after print dialog opens
     setTimeout(() => {
@@ -97,7 +98,7 @@ export default function QuoteViewActions({ quote }: QuoteViewActionsProps) {
         }
       >
         <div className="bg-slate-100 p-2 sm:p-4 rounded-xl overflow-x-auto max-h-[75vh]">
-          <QuotePrintTemplate quote={quote} />
+          <QuotePrintTemplate quote={quote} isPreview={true} />
         </div>
       </Modal>
     </>

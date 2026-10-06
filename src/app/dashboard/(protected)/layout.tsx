@@ -38,7 +38,7 @@ export default async function DashboardLayout({
   });
 
   return (
-    <div className="min-h-screen bg-panel-2 text-panel-12 flex font-sans transition-colors duration-200 print:bg-white print:text-black">
+    <div className="min-h-screen bg-panel-2 text-panel-12 flex font-sans transition-colors duration-200 print:bg-white print:text-black print:min-h-0 print:block">
       {/* Sidebar - Desktop Only */}
       <aside className="hidden md:flex w-56 bg-panel-1 border-r border-panel-6 flex-col fixed inset-y-0 left-0 z-20 transition-colors duration-200 print:hidden">
         <div className="h-14 flex items-center px-4 border-b border-panel-6">
@@ -75,7 +75,7 @@ export default async function DashboardLayout({
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 min-w-0 ml-0 md:ml-56 print:ml-0 flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 ml-0 md:ml-56 print:ml-0 flex flex-col min-h-screen print:min-h-0 print:block">
         {/* Top Navbar */}
         <header className="h-14 bg-panel-1 border-b border-panel-6 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-10 transition-colors duration-200 print:hidden">
           <div className="flex items-center flex-1 max-w-xl min-w-0">
@@ -100,7 +100,7 @@ export default async function DashboardLayout({
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 overflow-x-hidden">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 overflow-x-hidden print:p-0 print:overflow-visible">
           {children}
         </main>
       </div>
