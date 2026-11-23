@@ -31,6 +31,7 @@ interface ProductItem {
   images?: Array<{ url: string }>;
   inStock?: boolean;
   stockCount?: number;
+  isActive?: boolean;
 }
 
 interface SelectedItem {
@@ -472,9 +473,16 @@ export default function ManualQuoteModal({
 
                             {/* Ürün Adı */}
                             <td className="py-2.5 pr-2">
-                              <p className="font-semibold text-panel-12 line-clamp-1">
-                                {item.product.name}
-                              </p>
+                              <div className="flex items-center gap-1.5">
+                                <p className="font-semibold text-panel-12 line-clamp-1">
+                                  {item.product.name}
+                                </p>
+                                {item.product.isActive === false && (
+                                  <span className="px-1.5 py-0.5 text-[9px] font-semibold rounded bg-panel-4 text-panel-11 border border-panel-6 shrink-0">
+                                    Pasif
+                                  </span>
+                                )}
+                              </div>
                               <span className="text-[10px] text-panel-11">
                                 {item.product.category}
                               </span>
@@ -677,9 +685,16 @@ export default function ManualQuoteModal({
                         </div>
 
                         <div className="min-w-0">
-                          <p className="text-xs font-semibold text-panel-12 truncate group-hover:text-brand-11 transition-colors">
-                            {product.name}
-                          </p>
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <p className="text-xs font-semibold text-panel-12 truncate group-hover:text-brand-11 transition-colors">
+                              {product.name}
+                            </p>
+                            {product.isActive === false && (
+                              <span className="px-1.5 py-0.5 text-[9px] font-semibold rounded bg-panel-4 text-panel-11 border border-panel-6 shrink-0">
+                                Pasif
+                              </span>
+                            )}
+                          </div>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-[10px] text-panel-11">
                               {product.category}

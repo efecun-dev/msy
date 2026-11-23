@@ -103,6 +103,7 @@ export async function createProduct(formData: FormData) {
   });
   
   revalidatePath("/dashboard/products");
+  revalidatePath("/dashboard/quotes");
   revalidatePath("/");
 }
 
@@ -164,6 +165,7 @@ export async function updateProduct(id: number, formData: FormData) {
   });
   
   revalidatePath("/dashboard/products");
+  revalidatePath("/dashboard/quotes");
   revalidatePath("/");
 }
 
@@ -189,6 +191,7 @@ export async function deleteProduct(id: number) {
   });
   
   revalidatePath("/dashboard/products");
+  revalidatePath("/dashboard/quotes");
   revalidatePath("/");
 }
 
@@ -211,5 +214,6 @@ export async function deleteProductImage(id: number) {
     }
   }
   revalidatePath("/dashboard/products");
+  revalidatePath("/dashboard/quotes");
   revalidatePath("/");
 }

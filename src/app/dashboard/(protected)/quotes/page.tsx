@@ -14,7 +14,6 @@ export default async function QuotesPage() {
       },
     }),
     prisma.product.findMany({
-      where: { isActive: true },
       select: {
         id: true,
         name: true,
@@ -23,11 +22,12 @@ export default async function QuotesPage() {
         imageUrl: true,
         inStock: true,
         stockCount: true,
+        isActive: true,
         images: {
           select: { url: true },
         },
       },
-      orderBy: { name: "asc" },
+      orderBy: [{ isActive: "desc" }, { name: "asc" }],
     }),
   ]);
 
