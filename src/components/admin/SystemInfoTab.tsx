@@ -32,7 +32,11 @@ export default function SystemInfoTab() {
     try {
       setUpdateStep("Güncelleme kontrol ediliyor...");
       const statusRes = await checkUpdateStatus();
-      
+
+      if (!statusRes.success) {
+        throw new Error(statusRes.error || "Güncelleme kontrolü başarısız.");
+      }
+
       if (!statusRes.hasUpdate) {
         toast({ type: "success", title: "Sistem Güncel", description: statusRes.message });
         setUpdating(false);
@@ -40,31 +44,40 @@ export default function SystemInfoTab() {
         setUpdateProgress(0);
         return;
       }
-      
+
       setUpdateProgress(35);
       toast({ type: "info", title: "Güncelleme Bulundu", description: statusRes.message });
       setUpdateStep("Güncellemeler indiriliyor...");
-      
-      await pullUpdate();
-      
+
+      const pullRes = await pullUpdate();
+      if (!pullRes.success) {
+        throw new Error(pullRes.error || "Güncelleme çekilirken hata oluştu.");
+      }
+
       setUpdateProgress(60);
       toast({ type: "info", title: "Güncelleme Çekildi", description: "Yeni dosyalar indirildi. Sistem derleniyor..." });
       setUpdateStep("Sistem derleniyor (bu işlem sürebilir)...");
-      
-      await buildUpdate();
-      
+
+      const buildRes = await buildUpdate();
+      if (!buildRes.success) {
+        throw new Error(buildRes.error || "Derleme sırasında hata oluştu.");
+      }
+
       setUpdateProgress(90);
       toast({ type: "success", title: "Derleme Tamamlandı", description: "Uygulama yeniden başlatılıyor." });
       setUpdateStep("Yeniden başlatılıyor...");
-      
-      await restartApp();
+
+      const restartRes = await restartApp();
+      if (!restartRes.success) {
+        throw new Error(restartRes.error || "Yeniden başlatma başarısız.");
+      }
       setUpdateProgress(100);
-      
-    } catch (error: any) {
+
+    } catch (error: unknown) {
       toast({
         type: "error",
         title: "Güncelleme Başarısız",
-        description: error.message || "Bilinmeyen hata.",
+        description: error instanceof Error ? error.message : "Bilinmeyen hata.",
       });
     } finally {
       // Yeniden başlatma işleminde animasyonun bitmesi için biraz bekleyelim

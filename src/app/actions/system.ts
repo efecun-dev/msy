@@ -6,6 +6,16 @@ import { exec } from "child_process";
 import { promisify } from "util";
 
 const execAsync = promisify(exec);
+const EXEC_OPTIONS = { maxBuffer: 10 * 1024 * 1024 }; // 10MB
+
+function formatExecError(error: unknown): string {
+  if (error && typeof error === "object") {
+    const err = error as { stderr?: string; message?: string };
+    const raw = (err.stderr || err.message || "Bilinmeyen hata").trim();
+    return raw.length > 400 ? raw.slice(-400) : raw;
+  }
+  return "Bilinmeyen hata";
+}
 
 async function checkAuth() {
   const session = await getServerSession(authOptions);
@@ -16,51 +26,72 @@ async function checkAuth() {
 }
 
 export async function checkUpdateStatus() {
-  await checkAuth();
   try {
-    await execAsync("git fetch");
-    const { stdout } = await execAsync("git status -uno");
+    await checkAuth();
+    await execAsync("git fetch", EXEC_OPTIONS);
+    const { stdout } = await execAsync("git status -uno", EXEC_OPTIONS);
     if (stdout.includes("Your branch is behind") || stdout.includes("git pull")) {
-      return { hasUpdate: true, message: "Yeni bir güncelleme bulundu!" };
+      return { success: true as const, hasUpdate: true, message: "Yeni bir güncelleme bulundu!" };
     }
-    return { hasUpdate: false, message: "Sistem zaten en güncel sürümde." };
-  } catch (error: any) {
-    throw new Error("Güncelleme kontrolü başarısız: " + error.message);
+    return { success: true as const, hasUpdate: false, message: "Sistem zaten en güncel sürümde." };
+  } catch (error: unknown) {
+    console.error("Güncelleme kontrolü başarısız:", error);
+    return {
+      success: false as const,
+      hasUpdate: false,
+      message: "",
+      error: "Güncelleme kontrolü başarısız: " + formatExecError(error),
+    };
   }
 }
 
 export async function pullUpdate() {
-  await checkAuth();
   try {
-    const { stdout } = await execAsync("git pull");
-    return { success: true, message: "Güncellemeler başarıyla indirildi.", logs: stdout };
-  } catch (error: any) {
-    throw new Error("Güncelleme çekilirken hata oluştu: " + error.message);
+    await checkAuth();
+    // Sunucuda npm install sonrası değişebilen lockfile'ı temizle ki git pull çakışmasın
+    await execAsync("git checkout -- package-lock.json", EXEC_OPTIONS).catch(() => {});
+    const { stdout } = await execAsync("git pull", EXEC_OPTIONS);
+    return { success: true as const, message: "Güncellemeler başarıyla indirildi.", logs: stdout };
+  } catch (error: unknown) {
+    console.error("Güncelleme çekilirken hata oluştu:", error);
+    return {
+      success: false as const,
+      error: "Güncelleme çekilirken hata oluştu: " + formatExecError(error),
+    };
   }
 }
 
 export async function buildUpdate() {
-  await checkAuth();
   try {
-    const { stdout } = await execAsync("npm install --include=dev && npm run build");
-    return { success: true, message: "Sistem başarıyla derlendi ve hazırlandı.", logs: stdout };
-  } catch (error: any) {
-    throw new Error("Derleme sırasında hata oluştu: " + error.message);
+    await checkAuth();
+    const { stdout } = await execAsync("npm install --include=dev && npm run build", EXEC_OPTIONS);
+    await execAsync("git checkout -- package-lock.json", EXEC_OPTIONS).catch(() => {});
+    return { success: true as const, message: "Sistem başarıyla derlendi ve hazırlandı.", logs: stdout };
+  } catch (error: unknown) {
+    console.error("Derleme sırasında hata oluştu:", error);
+    return {
+      success: false as const,
+      error: "Derleme sırasında hata oluştu: " + formatExecError(error),
+    };
   }
 }
 
 export async function restartApp() {
-  await checkAuth();
   try {
+    await checkAuth();
     // Restart PM2 asynchronously so it doesn't kill the current request immediately
     setTimeout(() => {
       exec("pm2 restart msy-app", (err) => {
         if (err) console.error("PM2 restart hatası:", err);
       });
     }, 1500);
-    return { success: true, message: "Sunucu yeniden başlatılıyor..." };
-  } catch (error: any) {
-    throw new Error("Yeniden başlatma başarısız: " + error.message);
+    return { success: true as const, message: "Sunucu yeniden başlatılıyor..." };
+  } catch (error: unknown) {
+    console.error("Yeniden başlatma başarısız:", error);
+    return {
+      success: false as const,
+      error: "Yeniden başlatma başarısız: " + formatExecError(error),
+    };
   }
 }
 
